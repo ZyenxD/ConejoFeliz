@@ -27,15 +27,15 @@ var HelloWorldLayer = cc.Layer.extend({
     drop: function(){
         var bombs = new cc.Sprite(res.bomba_png);
         var carrots = new cc.Sprite(res.carrot_png);
-        var floor = new cc.rect(0,0,720,100);
+        var floor = new cc.rect(0,0,720,150);
         var bomb_x = Spawn[Math.floor(Math.random()*3 +0)];
         var carr_x = Spawn[Math.floor(Math.random()*3 +0)];
         bombs.setPosition(bomb_x,630);
         carrots.setPosition(carr_x,630);
         this.addChild(bombs,1);
         this.addChild(carrots,1);
-        var carr_fall = cc.moveTo(Math.floor(Math.random()*9 +1),carr_x,0);
-        var bomb_fall = cc.moveTo(Math.floor(Math.random()*9 +1),bomb_x,0);
+        var carr_fall = cc.moveTo(Math.floor(Math.random()*5 +1),carr_x,0);
+        var bomb_fall = cc.moveTo(Math.floor(Math.random()*5 +1),bomb_x,0);
         bombs.runAction(bomb_fall);
         carrots.runAction(carr_fall);
         this.b_drops.push(bombs);
@@ -45,13 +45,12 @@ var HelloWorldLayer = cc.Layer.extend({
         for(var bombs of this.b_drops){
             var b_box = bombs.getBoundingBox();
             if(cc.rectIntersectsRect(floor,b_box)){
-               bombs.setVisible(false);
-                if(!bombs.isVisible){
-                    this.b_drops.pop();
-                }
+                bombs.setVisible(false);
+                bombs.setPosition(917,409);
             }
             if(cc.rectIntersectsRect(bunny,b_box)){
                 confirm("GAME OVER");
+                
             }
         }
         for(var carrots of this.c_drops){
@@ -64,6 +63,13 @@ var HelloWorldLayer = cc.Layer.extend({
                 this.points.y = 630;
                 this.addChild(this.points,5);
                 carrots.setVisible(false);
+                this.removeChild(carrots,true);
+                carrots.setPosition(917,409);
+            }
+            if(cc.rectIntersectsRect(floor,c_box)){
+                carrots.setVisible(false);
+                this.removeChild(carrots,true);
+                carrots.setPosition(917,409);
             }
         }
 
