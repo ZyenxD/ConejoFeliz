@@ -50,7 +50,17 @@ var HelloWorldLayer = cc.Layer.extend({
             }
             if(cc.rectIntersectsRect(bunny,b_box)){
                 confirm("GAME OVER");
-                
+                p = 0;
+                this.removeChild(this.points,true);
+                this.points = new cc.LabelTTF("Points: "+p,"Arial",16);
+                this.points.x = 760;
+                this.points.y = 630;
+                this.addChild(this.points,5);
+            }
+        }
+        for(var bombs of this.b_drops){
+            if(bombs.isVisible=== false){
+                this.b_drops.pop();
             }
         }
         for(var carrots of this.c_drops){
