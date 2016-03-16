@@ -27,7 +27,6 @@ var HelloWorldLayer = cc.Layer.extend({
     drop: function(){
         var bombs = new cc.Sprite(res.bomba_png);
         var carrots = new cc.Sprite(res.carrot_png);
-        var floor = new cc.rect(0,0,720,150);
         var bomb_x = Spawn[Math.floor(Math.random()*3 +0)];
         var carr_x = Spawn[Math.floor(Math.random()*3 +0)];
         bombs.setPosition(bomb_x,630);
@@ -40,7 +39,12 @@ var HelloWorldLayer = cc.Layer.extend({
         carrots.runAction(carr_fall);
         this.b_drops.push(bombs);
         this.c_drops.push(carrots);
+       
+        
+    },
+    disap: function(){
         var bunny = this.sprConejo.getBoundingBox();
+        var floor = new cc.rect(0,0,720,25)
         //cc.log("here!");
         for(var bombs of this.b_drops){
             var b_box = bombs.getBoundingBox();
@@ -50,17 +54,18 @@ var HelloWorldLayer = cc.Layer.extend({
             }
             if(cc.rectIntersectsRect(bunny,b_box)){
                 confirm("GAME OVER");
-                p = 0;
+                p=0
                 this.removeChild(this.points,true);
-                this.points = new cc.LabelTTF("Points: "+p,"Arial",16);
-                this.points.x = 760;
+                this.points = new cc.LabelTTF("Points: "+p,"Arial",20);
+                this.points.x = 770;
                 this.points.y = 630;
                 this.addChild(this.points,5);
-            }
-        }
-        for(var bombs of this.b_drops){
-            if(bombs.isVisible=== false){
-                this.b_drops.pop();
+                for(var bombs of this.b_drops){
+                    bombs.setPosition(0,0);   
+                }
+                for(var carrots of this.c_drops){
+                    carrots.setPosition(0,0);
+                }
             }
         }
         for(var carrots of this.c_drops){
@@ -68,8 +73,8 @@ var HelloWorldLayer = cc.Layer.extend({
             if(cc.rectIntersectsRect(bunny,c_box)){
                 p+=10;
                 this.removeChild(this.points,true);
-                this.points = new cc.LabelTTF("Points: "+p,"Arial",16);
-                this.points.x = 760;
+                this.points = new cc.LabelTTF("Points: "+p,"Arial",20);
+                this.points.x = 770;
                 this.points.y = 630;
                 this.addChild(this.points,5);
                 carrots.setVisible(false);
@@ -83,7 +88,6 @@ var HelloWorldLayer = cc.Layer.extend({
             }
         }
 
-        
     },
     ctor:function () {
         this._super();
@@ -98,13 +102,14 @@ var HelloWorldLayer = cc.Layer.extend({
         //posicionando la imagen de fondo
         this.sprConejo = new cc.Sprite(res.conejo_png);
         this.sprConejo.setPosition(size.width / 2,size.height * 0.15);
-        this.points = new cc.LabelTTF("Points: "+p,"Arial",16);
-        this.points.x = 760;
+        this.points = new cc.LabelTTF("Points: "+p,"Arial",20);
+        this.points.x = 770;
         this.points.y = 630;
         cc.log(size.width / 2+" "+size.height * 0.15);
         this.addChild(this.sprConejo, 1);
         this.addChild(this.points,5);
-        this.schedule(this.drop,2);
+        this.schedule(this.drop,1);
+        this.schedule(this.disap,0,Infinity);
         
         
         cc.eventManager.addListener({
